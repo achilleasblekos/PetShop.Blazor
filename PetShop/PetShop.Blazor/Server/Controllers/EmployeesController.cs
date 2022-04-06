@@ -36,5 +36,19 @@ namespace PetShop.Blazor.Server.Controllers {
         public async Task Delete(int id) { 
             await _employeeRepo.DeleteAsync(id);
         }
+
+        [HttpPut]
+        public async Task<ActionResult> Put(EmployeesViewModel employee) {
+            var itemToUpdate = await _employeeRepo.GetByIdAsync(employee.ID);
+            if (itemToUpdate == null) return NotFound();
+
+            itemToUpdate.Name = employee.Name; 
+            itemToUpdate.Surname = employee.Surname;
+            itemToUpdate.EmployeeType = employee.EmployeeType;
+            itemToUpdate.SallaryPerMonth = employee.SallaryPerMonth;
+
+            await _employeeRepo.UpdateAsync(employee.ID, itemToUpdate);
+            return Ok();
+        }
     }
 }

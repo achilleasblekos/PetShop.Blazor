@@ -1,4 +1,5 @@
-﻿using PetShop.Blazor.Shared;
+﻿using Microsoft.AspNetCore.Components;
+using PetShop.Blazor.Shared;
 using PetShop.Model;
 using System.Net.Http.Json;
 
@@ -33,6 +34,30 @@ namespace PetShop.Blazor.Client.Pages {
 
 		async Task DeleteItem(EmployeesViewModel itemtoDelete) {
 			var response = await httpClient.DeleteAsync($"employees/{itemtoDelete}");
+			response.EnsureSuccessStatusCode();
+			await LoadItemsFromServer();
+		}
+
+		async Task NameChanged(ChangeEventArgs e, EmployeesViewModel itemtoUpdate) {
+			itemtoUpdate.Name = e.Value?.ToString();
+			UpdateLogic(e, itemtoUpdate);
+		}
+
+		async Task SurnameChanged(ChangeEventArgs e, EmployeesViewModel itemtoUpdate) {
+			itemtoUpdate.Surname = e.Value?.ToString();
+			UpdateLogic(e, itemtoUpdate);
+		}
+
+		//async Task TypeChanged(ChangeEventArgs e, EmployeesViewModel itemtoUpdate) { // TODO: update employeeType
+		//	itemtoUpdate.EmployeeType = 
+		//	UpdateLogic(e, itemtoUpdate);
+		//}
+		async Task SalaryChanged(ChangeEventArgs e, EmployeesViewModel itemtoUpdate) { // TODO: parse salary
+			//itemtoUpdate.SallaryPerMonth = e.Value.;
+			UpdateLogic(e, itemtoUpdate);
+		}
+		async void UpdateLogic(ChangeEventArgs e, EmployeesViewModel itemtoUpdate) {
+			var response = await httpClient.PutAsJsonAsync("employees", itemtoUpdate);
 			response.EnsureSuccessStatusCode();
 			await LoadItemsFromServer();
 		}

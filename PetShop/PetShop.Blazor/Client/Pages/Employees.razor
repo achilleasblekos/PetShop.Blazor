@@ -19,10 +19,10 @@
 	<tbody>
 		@foreach(var emp in employees) {
 			<tr>
-				<td><input @bind="emp.Name"></td>
-				<td>@emp.Surname</td>
+				<td><input value="@emp.Name" @onchange="(e)=>NameChanged(e, emp)"></td>
+				<td><input value="@emp.Surname" @onchange="(e)=>SurnameChanged(e, emp)"></td>
 				<td>@emp.EmployeeType</td>
-				<td>@emp.SallaryPerMonth</td>
+				<td><input value="@emp.SallaryPerMonth" @onchange="(e)=>SalaryChanged(e, emp)"></td>
 				<td><button class="btn btn-danger" @onclick="() => DeleteItem(emp)">Delete</button></td>
 			</tr>
 		}
