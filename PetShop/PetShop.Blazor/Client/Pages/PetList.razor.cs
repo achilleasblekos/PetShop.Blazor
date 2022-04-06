@@ -14,13 +14,15 @@ namespace PetShop.Blazor.Client.Pages
         private decimal Cost { get; set; }
         private decimal Price { get; set; }
         List<PetListViewModel> petList = new();
-        
+        bool isLoading = true;
+
 
 
         protected override async Task OnInitializedAsync()
         {
             await LoadItemsFromServer();
-            
+            bool isLoading = false;
+
         }
         private async Task LoadItemsFromServer()
         {
