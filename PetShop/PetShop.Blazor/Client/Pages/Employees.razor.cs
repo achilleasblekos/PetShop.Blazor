@@ -6,13 +6,15 @@ using System.Net.Http.Json;
 namespace PetShop.Blazor.Client.Pages {
 	public partial class Employees {
 		private string NewItemText { get; set; }
-		List<EmployeesViewModel> employees = new(); 
+		List<EmployeesViewModel> employees = null;
+		bool isLoading = true;
 			//{
 			//new EmployeesViewModel() { Name ="Takis",Surname="Manageridis",EmployeeType=EmployeeType.Manager, SallaryPerMonth=2000m},
 			//new EmployeesViewModel() { Name = "Akis", Surname = "Staffikis", EmployeeType = EmployeeType.Staff, SallaryPerMonth = 450.60m },
 
 		protected override async Task OnInitializedAsync() { // is called when the component is rendered
 			await LoadItemsFromServer();
+			isLoading = false;
 		}
 
 		private async Task LoadItemsFromServer() {
@@ -33,9 +35,12 @@ namespace PetShop.Blazor.Client.Pages {
 		}
 
 		async Task DeleteItem(EmployeesViewModel itemtoDelete) {
-			var response = await httpClient.DeleteAsync($"employees/{itemtoDelete}");
-			response.EnsureSuccessStatusCode();
-			await LoadItemsFromServer();
+			var confirm = await jsRuntime.InvokeAsync<bool>("confirmDelete", null);
+			if (confirm) {
+				var response = await httpClient.DeleteAsync($"employees/{itemtoDelete}");
+				response.EnsureSuccessStatusCode();
+				await LoadItemsFromServer();
+			}
 		}
 
 		async Task NameChanged(ChangeEventArgs e, EmployeesViewModel itemtoUpdate) {
