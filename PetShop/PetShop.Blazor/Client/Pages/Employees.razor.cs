@@ -22,18 +22,19 @@ namespace PetShop.Blazor.Client.Pages {
 			if (string.IsNullOrWhiteSpace(NewItemText)) return;
 
 			var newEmployee = new EmployeesViewModel { //create new employee on server
-				ID = 2,
 				Name = NewItemText
 			};
-			NewItemText = string.Empty;
-			//NewItemText = null;
+			//NewItemText = string.Empty;
+			NewItemText = null;
 
 			await httpClient.PostAsJsonAsync("employees", newEmployee); // send the new item to "employee route" //id=0?
 			await LoadItemsFromServer(); // bring back the list (also gets the newly  created id)
 		}
 
-		void DeleteItem(EmployeesViewModel itemtoDelete) {
-			employees.Remove(itemtoDelete);
+		async Task DeleteItem(EmployeesViewModel itemtoDelete) {
+			var response = await httpClient.DeleteAsync($"employees/{itemtoDelete}");
+			response.EnsureSuccessStatusCode();
+			await LoadItemsFromServer();
 		}
 	}
 }

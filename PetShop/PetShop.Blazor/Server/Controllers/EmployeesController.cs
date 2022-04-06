@@ -27,7 +27,7 @@ namespace PetShop.Blazor.Server.Controllers {
         }
 
         [HttpPost] //[HttpPost("newRoute")] custom route if I want
-        public async Task Post(EmployeesViewModel employee) { //create
+        public async Task Post(EmployeesViewModel employee) { //create // 404
             var newEmployee = new Employee();
             await _employeeRepo.AddAsync(newEmployee);  
         }
