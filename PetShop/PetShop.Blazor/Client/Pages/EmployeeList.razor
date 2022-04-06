@@ -1,5 +1,42 @@
-﻿<h3>EmployeeList</h3>
+﻿@page "/employeelist"
+@inject HttpClient httpClient
+@inject IJSRuntime jsRuntime
+@inject NavigationManager navigationManager
+
+<h3>Employees </h3>
+
+<input @bind=NewItemText placeholder="New item ..." />
+<button class="btn  btn-primary" @onclick="AddItem">Add</button>
+
+@if (isLoading) {
+	<p>Loading ... </p>
+}
+else {
+	<table class="table table-striped table-hover">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Surname</th>
+			<td>EmployeeType</td>
+			<th>Monthly sallary</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach(var emp in employees) {
+			<tr>
+				<td><input value="@emp.Name" @onchange="(e)=>NameChanged(e, emp)"></td>
+				<td><input value="@emp.Surname" @onchange="(e)=>SurnameChanged(e, emp)"></td>
+				<td>@emp.EmployeeType</td>
+				<td><input value="@emp.SallaryPerMonth" @onchange="(e)=>SalaryChanged(e, emp)"></td>
+				<td><button class="btn btn-danger" @onclick="() => DeleteItem(emp)">Delete</button></td>
+			</tr>
+		}
+	</tbody>
+</table>
+}
 
 @code {
 
 }
+
