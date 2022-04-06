@@ -12,6 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\PetShop.EF\PetShop.EF.csproj" />
+    <ProjectReference Include="..\..\PetShop.Model\PetShop.Model.csproj" />
     <ProjectReference Include="..\Shared\PetShop.Blazor.Shared.csproj" />
   </ItemGroup>
 

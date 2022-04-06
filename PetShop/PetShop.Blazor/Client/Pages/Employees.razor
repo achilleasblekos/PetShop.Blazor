@@ -1,0 +1,34 @@
+﻿@page "/employees"
+@inject HttpClient httpClient
+
+<h3>Employees </h3>
+
+<input @bind=NewItemText placeholder="New item ..." />
+<button class="btn  btn-primary" @onclick="AddItem">Add</button>
+
+<table class="table table-striped table-hover">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Surname</th>
+			<td>.EmployeeType</td>
+			<th>Monthly sallary</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach(var emp in employees) {
+			<tr>
+				<td><input @bind="emp.Name"></td>
+				<td>@emp.Surname</td>
+				<td>@emp.EmployeeType</td>
+				<td>@emp.SallaryPerMonth</td>
+				<td><button class="btn btn-danger" @onclick="() => DeleteItem(emp)">Delete</button></td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+@code {
+
+}
