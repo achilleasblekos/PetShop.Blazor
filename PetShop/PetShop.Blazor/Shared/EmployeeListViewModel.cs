@@ -12,6 +12,8 @@ namespace PetShop.Blazor.Shared {
         public string Surname { get; set; }
         public EmployeeType EmployeeType { get; set; }
         public decimal SallaryPerMonth { get; set; }
+        //public List<TransactionListViewModel> Transactions { get; set; } = new();
+
     }
 
     public class EmployeeEditViewModel {
@@ -20,5 +22,7 @@ namespace PetShop.Blazor.Shared {
         public string Surname { get; set; }
         public EmployeeType EmployeeType { get; set; }
         public decimal SallaryPerMonth { get; set; }
+        //public List<TransactionListViewModel> Transactions { get; set; } = new();
+
     }
 }
