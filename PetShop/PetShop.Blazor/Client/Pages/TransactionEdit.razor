@@ -14,8 +14,8 @@ else
     <div class="card mt-2">
         <div class="card-header">
             <div class="input-group">
-                @*<input class="form-control me-2" @bind="TransactionItem" placeholder="New comment ..." />*@
-                <CommenterSelect Commenters="TransactionItem.Customers"
+                <input class="form-control me-2" @bind="TransactionItem" placeholder="New comment ..." />
+                <CommenterSelect Commenters="TodoItem.Commenters"
                                  ShowPlaceholder=true
                                  @bind-Value="newCustomerId" />
                 <button class="btn btn-primary" @onclick="AddCustomer">+</button>
@@ -65,21 +65,8 @@ else
 
     protected void AddCustomer()
     {
-        if (newCustomerId == -1) return;
-
-        TransactionItem._Customer = new TransactionEditCustomerViewModel() {
-            ID = TransactionItem.Customer.ID,
-            Name = TransactionItem.Customer.Name,
-            Surname = TransactionItem.Customer.Surname,
-            TIN = TransactionItem.Customer.TIN,
-            Phone = TransactionItem.Customer.Phone
-        };
-        //     {
-       //         Text = newCommentText,
-       //         CommenterId = newCommentCommenterId
-       //     });
-       // newCommentText = null;
-       // newCommentCommenterId = -1;
+     
+            
     }
 
 
