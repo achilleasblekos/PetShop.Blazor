@@ -10,11 +10,11 @@ namespace PetShop.Blazor.Server.Controllers {
     public class EmployeeController : ControllerBase {
 
         private readonly IEntityRepo<Employee> _employeeRepo;
-        //private readonly IEntityRepo<Transaction> _transactionRepo;
+        private readonly IEntityRepo<Transaction> _transactionRepo;
 
-        public EmployeeController(IEntityRepo<Employee> employeeRepo) {
+        public EmployeeController(IEntityRepo<Employee> employeeRepo, IEntityRepo<Transaction> transactionRepo) {
             _employeeRepo = employeeRepo;
-            //_transactionRepo = transactionRepo;
+            _transactionRepo = transactionRepo;
         }
 
         [HttpGet]
@@ -45,6 +45,12 @@ namespace PetShop.Blazor.Server.Controllers {
                 //    Text = comment.Text,
                 //    CommenterId = comment.CommenterId
                 //}).ToList();
+
+                //var transactions = await _transactionRepo.GetAllAsync();
+                //model.Transactions = transactions.Select(x => new TodoEditCommenterViewModel {
+                //    ID = x.Id,
+                //    
+                //}).ToList();
             }
             return model;
         }
@@ -63,13 +69,16 @@ namespace PetShop.Blazor.Server.Controllers {
                 EmployeeType = employee.EmployeeType,
                 SallaryPerMonth = employee.SallaryPerMonth
             };
-            //foreach (var transaction in employee.Transactions)
-            //{
+            // 1 new transaction
+            // 1 employee,
+            // 1 customer
+            // possible multiple petfoods,
+            // possibly 1 pet
             //    newEmployee.Transactions.Add(new Transaction()
             //    {
             //        //transaction stuff
             //    });
-            //}
+            //  NOT HERE
             await _employeeRepo.AddAsync(newEmployee);
         }
 
@@ -83,9 +92,9 @@ namespace PetShop.Blazor.Server.Controllers {
             itemToUpdate.Surname = employee.Surname;
             itemToUpdate.EmployeeType = employee.EmployeeType;
             itemToUpdate.SallaryPerMonth = employee.SallaryPerMonth;
-            //itemToUpdate.Transactions = employee.Transactions.Select(transaction => new Transaction() {
-            //    ID = transaction.ID,
-            //    CommenterId = comment.CommenterId
+            //itemToUpdate.Transactions = employee.Transactions.Select(transaction => new Transaction() { // those transactions would come from 
+            //    ID = transaction.ID,                                                                    //  the Client, so probably not this way
+            //    CommenterId = comment.CommenterId 
             //}).ToList();
 
             await _employeeRepo.UpdateAsync(employee.ID, itemToUpdate);
