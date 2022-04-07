@@ -1,6 +1,8 @@
 ﻿@page "/petList"
 @using PetShop.Model
 @inject HttpClient httpClient
+@inject IJSRuntime jsRuntime
+@inject NavigationManager navigationManager
 
 <h3>PetList</h3>
 
@@ -34,7 +36,10 @@ else{
                     <td>@pet.PetStatus</td>
                     <td>@pet.Cost</td>
                     <td>@pet.Price</td>
-                     <td><button class="btn btn-danger" @onclick="() => DeletePet(pet)">Delete</button></td>
+                     <td>
+                         <button class="btn btn-primary" @onclick="() => EditItem(pet)">Edit</button>
+                         <button class="btn btn-danger" @onclick="() => DeletePet(pet)">Delete</button>
+                     </td>
                 </tr>
             }
         </tbody>

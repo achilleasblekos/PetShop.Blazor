@@ -19,4 +19,14 @@ namespace PetShop.Blazor.Shared
 
 
     }
+    public class PetEditViewModel
+    {
+        public int ID { get; set; }
+        public string? Breed { get; set; }
+        public PetStatus PetStatus { get; set; }
+        public AnimalType AnimalType { get; set; }
+        public decimal Price { get; set; }
+        public decimal Cost { get; set; }
+
+    }
 }

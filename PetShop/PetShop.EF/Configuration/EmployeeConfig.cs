@@ -17,9 +17,10 @@ namespace PetShop.EF.Configuration {
         builder.Property(employee => employee.Name).HasMaxLength(maxLength: 100);
         builder.Property(employee => employee.Surname).HasMaxLength(maxLength: 100);
         builder.Property(employee => employee.SallaryPerMonth).HasColumnType("decimal(10, 2)");
-        //builder.Property(employee => employee.SallaryPerMonth).HasColumnType("decimal(10, 2)");
+            //builder.Property(employee => employee.SallaryPerMonth).HasColumnType("decimal(10, 2)");
+        //Relation exists in TransactionsConfig, no need for both places
+        //builder.HasMany(employee => employee.Transactions).WithOne(transaction => transaction.Employee) //1 empl has many transactions 
+        //        .HasForeignKey(transaction => transaction.EmployeeID);                                  //foreign key is EmployeeID
         }
-
-
     }
 }

@@ -30,18 +30,43 @@ namespace PetShop.Blazor.Server.Controllers
                 Price= x.Price,
             });
         }
-
-        [HttpPost]
-        public async Task Post(PetListViewModel pet)
+        [HttpGet("{id}")]
+        public async Task<PetEditViewModel> Get(int id)
         {
-            var newPet = new Pet();
-            await _petRepo.AddAsync(newPet);
+            PetEditViewModel model = new();
+            if (id != 0)
+            {
+                var existing = await _petRepo.GetByIdAsync(id);
+                model.ID = existing.ID;
+                model.Breed = existing.Breed;
+                model.AnimalType = existing.AnimalType;
+                model.PetStatus = existing.PetStatus;
+                model.Price = existing.Price;
+                model.Cost = existing.Cost;
+                
+            }
+            return model;
         }
 
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {
             await _petRepo.DeleteAsync(id);
+        }
+
+        [HttpPost]
+        public async Task Post(PetListViewModel pet)
+        {
+            var newPet = new Pet()
+            {
+                ID = pet.ID,
+                Breed = pet.Breed,
+                AnimalType = pet.AnimalType,
+                PetStatus = pet.PetStatus,
+                Price = pet.Price,
+                Cost = pet.Cost
+            };
+            await _petRepo.AddAsync(newPet);
         }
 
         [HttpPut]
@@ -54,7 +79,8 @@ namespace PetShop.Blazor.Server.Controllers
             itemToUpdate.Cost = pet.Cost;
             itemToUpdate.Price = pet.Price;
             itemToUpdate.ID = pet.ID;
-
+            itemToUpdate.Breed = pet.Breed;
+            itemToUpdate.AnimalType = pet.AnimalType;
             await _petRepo.UpdateAsync(pet.ID, itemToUpdate);
 
             return Ok();
