@@ -35,7 +35,7 @@ namespace PetShop.Blazor.Client.Pages
         }
         async Task DeletePet(PetListViewModel itemToDelete)
         {
-            var confirm = await jsRuntime.InvokeAsync<bool>("confirm delete", null);
+            var confirm = await jsRuntime.InvokeAsync<bool>("confirmDelete", null);
             if (confirm)
             {
                 var response = await httpClient.DeleteAsync($"pet/{itemToDelete.ID}");
@@ -43,12 +43,5 @@ namespace PetShop.Blazor.Client.Pages
                 await LoadItemsFromServer();
             }
         }
-
-        //async Task PetStatusChanged(ChangeEventArgs e, PetListViewModel pet)
-        //{
-        //    pet.PetStatus = 
-        //    var response = await httpClient.PutAsJsonAsync("pet", pet);
-        //    response.EnsureSuccessStatusCode();
-        //}
     }
 }

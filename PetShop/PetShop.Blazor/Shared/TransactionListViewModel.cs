@@ -27,7 +27,9 @@ namespace PetShop.Blazor.Shared
         public Customer Customer { get; set; }
         public Employee Employee { get; set; }
         public Pet Pet { get; set; }
+        public List<TransactionEditEmployeeViewModel> Employees { get; set; } = new();
         public List<TransactionEditPetFoodViewModel> PetFoods { get; set; } = new();
+        public List<TransactionEditCustomerViewModel> Customers { get; set; } = new();
     }
 
     public class TransactionEditPetFoodViewModel
@@ -43,7 +45,17 @@ namespace PetShop.Blazor.Shared
         public int ID { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
+        public string Phone { get; set; }
         public string TIN { get; set; }
+    }
+
+    public class TransactionEditEmployeeViewModel
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public EmployeeType EmployeeType { get; set; }
+        public decimal SallaryPerMonth { get; set; }
     }
 }
          

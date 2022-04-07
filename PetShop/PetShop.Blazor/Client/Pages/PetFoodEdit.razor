@@ -1,4 +1,5 @@
 ﻿@page "/petfoodlist/edit/{Id:int?}"
+@using PetShop.Model
 @inject HttpClient httpClient
 @inject NavigationManager navigationManager
 
@@ -12,11 +13,16 @@
 else
 {
     <div class="row">
-            <div class="col-md-6">
-            <label class="form-label">AnimalType</label>
-            <input class="form-control" @bind="@PetFoodItem.AnimalType" />
-            </div>       
-        
+        <div class="col-md-6">
+            <label for="petfood-type">Type</label>
+            <select name="petfood-type" class="form-select" @bind="PetFoodType">
+                <option value="-1">Select Pet Food Type</option>
+                @foreach (var item in Enum.GetValues(typeof(AnimalType)))
+                {
+                    <option value="@((int)item)">@item.ToString()</option>
+                }
+            </select>
+        </div>       
         <div class="col-md-6">
             <label class="form-label">Price</label>
             <input class="form-control" @bind="@PetFoodItem.Price" />
@@ -37,15 +43,29 @@ else
 @code {
     [Parameter] public int? ID { get; set; }
     PetFoodEditViewModel PetFoodItem { get; set; }
+    private int PetFoodType { get; set; } = -1;
 
-     protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        PetFoodItem = await httpClient.GetFromJsonAsync<PetFoodEditViewModel>($"petfood/{(ID == null ? 0 : ID)}");
+        if(ID == null)
+        {
+            PetFoodItem = await httpClient.GetFromJsonAsync<PetFoodEditViewModel>($"petfood/{(ID == null ? 0 : ID)}");
+        }
+        if(ID != null)
+        {
+             PetFoodType = (int)PetFoodItem.AnimalType;
+        }
+
     }
 
      protected async Task OnSave()
     {
+         if (PetFoodType == -1 ||
+            PetFoodItem.Price == 0 ||
+            PetFoodItem.Cost == 0)
+            return;
         HttpResponseMessage response;
+        PetFoodItem.AnimalType = (AnimalType)PetFoodType;
         if (ID == null)
         {
             response = await httpClient.PostAsJsonAsync("petfood", PetFoodItem);

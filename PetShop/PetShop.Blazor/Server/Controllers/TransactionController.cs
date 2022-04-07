@@ -10,7 +10,7 @@ namespace PetShop.Blazor.Server.Controllers
     public class TransactionController : ControllerBase
     { 
             private readonly IEntityRepo<Transaction> _transactionRepo;
-            //private readonly IEntityRepo<Commenter> _commenterRepo;
+            private readonly IEntityRepo<Customer> _customerRepo;
 
             public TransactionController(IEntityRepo<Transaction> transactionRepo)
             {
@@ -39,34 +39,26 @@ namespace PetShop.Blazor.Server.Controllers
         [HttpGet("{id}")]
             public async Task<TransactionEditViewModel> Get(int id)
             {
-            TransactionEditViewModel model = new();
-            if (id != 0)
-            {
-                var existing = await _transactionRepo.GetByIdAsync(id);
-                model.ID = existing.ID;
-                model.Customer = existing.Customer;
-                model.Employee = existing.Employee;
-                model.Pet = existing.Pet;
-                //model.PetFoods=....
-            }
+                TransactionEditViewModel model = new();
+                if (id != 0)
+                {
+                    var existing = await _transactionRepo.GetByIdAsync(id);
+                    model.ID = existing.ID;
+                    model.Customer = existing.Customer;
+                    model.Employee = existing.Employee;
+                    model.Pet = existing.Pet;
+                }
+                var customers = await _customerRepo.GetAllAsync();
+                model.Customers = customers.Select(customers => new TransactionEditCustomerViewModel
+                {
+                    ID = customers.ID,
+                    Name = customers.Name,
+                    Surname = customers.Surname,
+                    TIN = customers.TIN,
+                    Phone = customers.Phone
+                }).ToList();
 
-        
-                    //model.Comments = existing.Comments.Select(comment => new CustomerEditCommentViewModel
-                    //{
-                    //    Id = comment.Id,
-                    //    Text = comment.Text,
-                    //    CommenterId = comment.CommenterId
-                    //}).ToList();
-                
-
-                //var commenters = await _commenterRepo.GetAllAsync();
-                //model.Commenters = commenters.Select(x => new CustomerEditCommenterViewModel
-                //{
-                //    Id = x.Id,
-                //    Name = x.Name
-                //}).ToList();
-
-                return model;
+             return model;
             }
 
             [HttpDelete("{id}")]
@@ -77,28 +69,41 @@ namespace PetShop.Blazor.Server.Controllers
 
 
 
-            [HttpPost]
-            public async Task Post(TransactionEditViewModel transaction)
+        [HttpPost]
+        public async Task Post(TransactionEditViewModel transaction)
+        {
+            var newTransaction = new Transaction()
             {
-                var newTransaction = new Transaction()
-                {
-                    //ID = transaction.ID,
-                    //Date = transaction.
-                    //Surname = transaction.Surname,
-                    //Name = transaction.Name,
-                    //Phone = transaction.Phone,
-                    //TIN = transaction.TIN,
+                Customer = transaction.Customer,
+                Employee = transaction.Employee,
+                Pet = transaction.Pet,
+                ID = transaction.ID,
+            };
+            foreach (var customer in transaction.Customers)
+            {
+                newTransaction.Customer.Name = customer.Name;
+                newTransaction.Customer.Surname = customer.Surname;
+                newTransaction.Customer.TIN = customer.TIN;
+                newTransaction.Customer.Phone = customer.Phone;
+             };
+            foreach(var employee in transaction.Employees)
+            {
+                newTransaction.Employee.Name = employee.Name;
+                newTransaction.Employee.SallaryPerMonth= employee.SallaryPerMonth;
+                newTransaction.Employee.Surname = employee.Surname;
+                newTransaction.Employee.EmployeeType = employee.EmployeeType;
+                newTransaction.Employee.ID = employee.ID;
+            };
+            foreach(var petfoods in transaction.PetFoods)
+            {
+                newTransaction.PetFood.ID = petfoods.ID;
+                newTransaction.PetFood.Price = petfoods.Price;
+                newTransaction.PetFood.Cost = petfoods.Cost;
+                newTransaction.PetFood.AnimalType = petfoods.AnimalType;
+            };
 
-                };
-                //foreach (var comment in transaction.Comments)
-                //{
-                //    newTransaction.Comments.Add(new CustomerComment(comment.Text)
-                //    {
-                //        CommenterId = comment.CommenterId
-                //    });
-                //}
-                await _transactionRepo.AddAsync(newTransaction);
-            }
+           await _transactionRepo.AddAsync(newTransaction);
+         }
 
             [HttpPut]
             public async Task<ActionResult> Put(TransactionEditViewModel transaction)

@@ -5,7 +5,6 @@
 
 <h3>Employees </h3>
 
-<input @bind=NewItemText placeholder="New item ..." />
 <button class="btn  btn-primary" @onclick="AddItem">Add</button>
 
 @if (isLoading) {
@@ -19,19 +18,20 @@ else {
 			<th>Surname</th>
 			<td>EmployeeType</td>
 			<th>Monthly sallary</th>
-			<th></th>
 		</tr>
 	</thead>
 	<tbody>
-		@foreach(var emp in employees) {
+		@foreach(var emp in employeeList) {
 			<tr>
 				<td>@emp.Name</td>
 				<td>@emp.Surname</td>
 				<td>@emp.EmployeeType</td>
 				<td>@emp.SallaryPerMonth</td>
-				<td>Transactions</td>
+				<td>
 				<button class="btn btn-primary" @onclick="() => EditItem(emp)">Edit</button>
 				<button class="btn btn-danger" @onclick="() => DeleteItem(emp)">Delete</button>
+				</td>
+				
 			</tr>
 		}
 	</tbody>

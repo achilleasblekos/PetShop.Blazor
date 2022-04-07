@@ -10,18 +10,27 @@
 }
 else
 {
-
-    <div class="card mt-2">
-        <div class="card-header">
-            <div class="input-group">
-                <input class="form-control me-2" @bind="TransactionItem" placeholder="New comment ..." />
-                <CommenterSelect Commenters="TodoItem.Commenters"
-                                 ShowPlaceholder=true
-                                 @bind-Value="newCustomerId" />
-                <button class="btn btn-primary" @onclick="AddCustomer">+</button>
-            </div>
+    <div class="row">
+        <div class="col-md-6">
+        <select class="form-select" aria-label="Default select example" @bind="newCustomerId">
+                @foreach(var customer in TransactionItem.Customers )
+                {
+                    <option value="@customer.ID"> @customer.Name @customer.Surname</option>
+                }
+            </select>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-6">
+         <select class="form-select" aria-label="Default select example">
+        <option selected>Select Employee</option>
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+        </select>
+        </div>
+    </div>
+        
    
 
     <div class="row mt-2">
@@ -35,7 +44,7 @@ else
 @code {
     [Parameter] public int? Id { get; set; }
     TransactionEditViewModel TransactionItem { get; set; }
-    private int newCustomerId { get; set; } = -1;
+    private int newCustomerId { get; set; } 
 
     protected override async Task OnInitializedAsync()
     {

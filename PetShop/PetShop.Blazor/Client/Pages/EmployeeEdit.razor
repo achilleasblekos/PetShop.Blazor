@@ -1,4 +1,5 @@
 ﻿@page "/employeelist/edit/{Id:int?}"
+@using PetShop.Model
 @inject HttpClient httpClient
 @inject NavigationManager navigationManager
 
@@ -19,18 +20,21 @@ else
             <label class="form-label">Surname</label>
             <input class="form-control" @bind="@EmployeeItem.Surname" />
         </div>
-        <div class="col-md-6">
-            <label class="form-label">Employee Type</label>
-            <input class="form-control" @bind="@EmployeeItem.EmployeeType" />
-        </div>
+         <div class="col-md-6">
+            <label for="employee-type">Type</label>
+                     <select name="employee-type" class="form-select" @bind="EmployeeType">
+                     <option value="-1">Select Employee Type</option>
+                     @foreach (var item in Enum.GetValues(typeof(EmployeeType)))
+                     {
+                         <option value="@((int)item)">@item.ToString()</option>
+                     }
+                     </select>
+          </div>
         <div class="col-md-6">
             <label class="form-label">Monthly Salary</label>
             <input class="form-control" @bind="@EmployeeItem.SallaryPerMonth" />
         </div>
-        <div class="col-md-6">
-            <label class="form-label">Transactions</label>
-            
-        </div>
+        
     </div>
     <div class="row mt-2">
         <div class="col">
@@ -42,14 +46,29 @@ else
 @code {
     [Parameter] public int? ID { get; set; }
     EmployeeEditViewModel EmployeeItem { get; set; }
+    private int EmployeeType { get; set; } = -1;
 
-     protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        EmployeeItem = await httpClient.GetFromJsonAsync<EmployeeEditViewModel>($"employee/{(ID == null ? 0 : ID)}");
+        if (ID == null)
+        {
+            EmployeeItem = await httpClient.GetFromJsonAsync<EmployeeEditViewModel>($"employee/{(ID == null ? 0 : ID)}");
+
+        }
+        if(ID != null)
+        {
+            EmployeeType = (int)EmployeeItem.EmployeeType;
+        }
+
     }
 
      protected async Task OnSave()
     {
+        if (string.IsNullOrEmpty(EmployeeItem.Name) ||
+            string.IsNullOrEmpty(EmployeeItem.Surname) ||
+            EmployeeItem.SallaryPerMonth == 0 ||
+            EmployeeType == -1)
+            return;
         HttpResponseMessage response;
         if (ID == null)
         {
