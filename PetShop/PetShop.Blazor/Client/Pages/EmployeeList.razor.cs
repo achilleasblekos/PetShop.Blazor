@@ -6,7 +6,7 @@ using System.Net.Http.Json;
 namespace PetShop.Blazor.Client.Pages {
     public partial class EmployeeList {
         private string NewItemText { get; set; }
-        List<EmployeeListViewModel> employees = null;
+        List<EmployeeListViewModel> employees = new();
         bool isLoading = true;
         //{
         //new EmployeesViewModel() { Name ="Takis",Surname="Manageridis",EmployeeType=EmployeeType.Manager, SallaryPerMonth=2000m},
