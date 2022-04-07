@@ -8,11 +8,6 @@ namespace PetShop.Blazor.Client.Pages
 {
     public partial class PetList 
     {
-        private string Breed { get; set; }
-        private AnimalType animalType { set; get; }
-        private PetStatus status { set; get; }
-        private decimal Cost { get; set; }
-        private decimal Price { get; set; }
         List<PetListViewModel> petList = new();
         bool isLoading = true;
 
@@ -21,7 +16,7 @@ namespace PetShop.Blazor.Client.Pages
         protected override async Task OnInitializedAsync()
         {
             await LoadItemsFromServer();
-            bool isLoading = false;
+            isLoading = false;
 
         }
         private async Task LoadItemsFromServer()
@@ -32,25 +27,21 @@ namespace PetShop.Blazor.Client.Pages
 
         async Task AddNewPet()
         {
-            //if (string.IsNullOrWhiteSpace(NewPetText)) return;
-            var newPet = new PetListViewModel
-            {
-                Breed = Breed,
-                AnimalType = animalType,
-                PetStatus= status,
-                Cost=Cost,
-                Price=Price,
-            };
-            
-
-            await httpClient.PostAsJsonAsync("pet", newPet);
-            await LoadItemsFromServer();
+            navigationManager.NavigateTo("/petList/edit/");
         }
-
-
-        void DeletePet(PetListViewModel pet)
+        async Task EditItem(PetListViewModel itemToEdit)
         {
-
+            navigationManager.NavigateTo($"/petlist/edit/{itemToEdit.ID}");
+        }
+        async Task DeletePet(PetListViewModel itemToDelete)
+        {
+            var confirm = await jsRuntime.InvokeAsync<bool>("confirm delete", null);
+            if (confirm)
+            {
+                var response = await httpClient.DeleteAsync($"pet/{itemToDelete.ID}");
+                response.EnsureSuccessStatusCode();
+                await LoadItemsFromServer();
+            }
         }
 
         //async Task PetStatusChanged(ChangeEventArgs e, PetListViewModel pet)
