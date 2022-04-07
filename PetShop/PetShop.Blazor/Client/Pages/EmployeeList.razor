@@ -25,12 +25,13 @@ else {
 	<tbody>
 		@foreach(var emp in employees) {
 			<tr>
-				<td><input value="@emp.Name" @onchange="(e)=>NameChanged(e, emp)"></td>
-				<td><input value="@emp.Surname" @onchange="(e)=>SurnameChanged(e, emp)"></td>
+				<td>@emp.Name</td>
+				<td>@emp.Surname</td>
 				<td>@emp.EmployeeType</td>
-				<td><input value="@emp.SallaryPerMonth" @onchange="(e)=>SalaryChanged(e, emp)"></td>
+				<td>@emp.SallaryPerMonth</td>
 				<td>Transactions</td>
-				<td><button class="btn btn-danger" @onclick="() => DeleteItem(emp)">Delete</button></td>
+				<button class="btn btn-primary" @onclick="() => EditItem(emp)">Edit</button>
+				<button class="btn btn-danger" @onclick="() => DeleteItem(emp)">Delete</button>
 			</tr>
 		}
 	</tbody>

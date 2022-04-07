@@ -57,9 +57,9 @@ namespace PetShop.Blazor.Client.Pages {
         //    UpdateLogic(e, itemtoUpdate);
         //}
 
-        //async Task TypeChanged(ChangeEventArgs e, EmployeesViewModel itemtoUpdate) { // TODO: update employeeType
+        //async Task TypeChanged(ChangeEventArgs e, EmployeeListViewModel itemtoUpdate) { // TODO: update employeeType
         //	itemtoUpdate.EmployeeType = 
-        //	UpdateLogic(e, itemtoUpdate);
+        //	//UpdateLogic(e, itemtoUpdate);
         //}
         //async Task SalaryChanged(ChangeEventArgs e, EmployeeListViewModel itemtoUpdate) { // TODO: parse salary
         //                                                                                  //itemtoUpdate.SallaryPerMonth = e.Value.;

@@ -24,19 +24,19 @@ namespace PetShop.EF.Repositories
             await  context.SaveChangesAsync(); 
         }
 
-        //public async Task Create(Employee entity)
-        //{
-        //    using var context = new PetShopContext();
-        //    context.Employees.Add(entity);
-        //    await context.SaveChangesAsync();
-        //}
+        public async Task Create(Employee entity)
+        {
+            using var context = new PetShopContext();
+            context.Employees.Add(entity);
+            await context.SaveChangesAsync();
+        }
 
-        //public async Task Delete(int id)
-        //{
-        //    using var context = new PetShopContext();
-        //    DeleteLogic(context, id);
-        //    await context.SaveChangesAsync();
-        //}
+        public async Task Delete(int id)
+        {
+            using var context = new PetShopContext();
+            DeleteLogic(context, id);
+            await context.SaveChangesAsync();
+        }
 
         public async Task DeleteAsync(int id) {
             DeleteLogic(context, id);
@@ -55,23 +55,24 @@ namespace PetShop.EF.Repositories
         }
 
         public Employee? GetById(int id)
-        {
-            
+        {         
             using var context = new PetShopContext();
+            //return await context.Employees.AsNoTracking().Include(employee=>employee.Transactions).SingleOrDefaultAsync(employee=>employee.ID==id);
             return context.Employees.Where(employee => employee.ID == id).SingleOrDefault();
         }
 
         public async Task<Employee?> GetByIdAsync(int id) {
 
+            //return await context.Employees.AsNoTracking().Include(employee=>employee.Transactions).SingleOrDefaultAsync(employee=>employee.ID==id);
             return await context.Employees.Where(employee => employee.ID == id).SingleOrDefaultAsync();
         }
 
-        //public async Task Update(int id, Employee entity)
-        //{
-        //    using var context = new PetShopContext();
-        //    UpdateLogic(entity, context, id);
-        //    await context.SaveChangesAsync();
-        //}
+        public async Task Update(int id, Employee entity)
+        {
+            using var context = new PetShopContext();
+            UpdateLogic(entity, context, id);
+            await context.SaveChangesAsync();
+        }
 
         public async Task UpdateAsync(int id, Employee entity) {
             UpdateLogic(entity, context, id);
