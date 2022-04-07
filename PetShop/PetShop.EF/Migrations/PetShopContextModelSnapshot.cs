@@ -121,6 +121,9 @@ namespace PetShop.EF.Migrations
                     b.Property<decimal>("Cost")
                         .HasColumnType("decimal(10,2)");
 
+                    b.Property<int>("PetStatus")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(10,2)");
 

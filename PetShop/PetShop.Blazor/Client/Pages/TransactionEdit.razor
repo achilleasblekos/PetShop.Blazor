@@ -1,0 +1,126 @@
+﻿@page "/todolist/edit/{Id:int?}"
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+
+<h3>TransactionEdit</h3>
+
+@if (TodoItem == null)
+{
+    <p>Loading ...</p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-6">
+            <label class="form-label">Title</label>
+            <input class="form-control" @bind="@TodoItem.Title" />
+        </div>
+        @if (Id != null)
+        {
+            <div class="col-md-6">
+                <label class="form-label">Finished</label>
+                <input class="form-check" type="checkbox" @bind="@TodoItem.Finished" />
+            </div>
+        }
+    </div>
+
+    <div class="card mt-2">
+        <div class="card-header">
+            <div>
+                Comments
+            </div>
+            <div class="input-group">
+                <input class="form-control me-2" @bind="newCommentText" placeholder="New comment ..." />
+                <CommenterSelect Commenters="TodoItem.Commenters"
+                                 ShowPlaceholder=true
+                                 @bind-Value="newCommentCommenterId" />
+                <button class="btn btn-primary" @onclick="AddComment">+</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Text</th>
+                        <th>Commenter</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var comment in TodoItem.Comments)
+                    {
+                        <tr>
+                            <td>
+                                <input class="form-control" @bind="comment.Text" />
+                            </td>
+                            <td>
+                                <CommenterSelect Commenters="TodoItem.Commenters" @bind-Value="comment.CommenterId" />
+                            </td>
+                            <td>
+                                <button class="btn btn-danger" @onclick="()=> DeleteComment(comment)">X</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col">
+            <button class="btn btn-success" @onclick="OnSave">Save</button>
+            <button class="btn btn-danger" @onclick="OnCancel">Cancel</button>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public int? Id { get; set; }
+    TodoEditViewModel TodoItem { get; set; }
+    private string newCommentText { get; set; }
+    private int newCommentCommenterId { get; set; } = -1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        TodoItem = await httpClient.GetFromJsonAsync<TodoEditViewModel>($"todo/{(Id == null ? 0 : Id)}");
+    }
+
+    protected void AddComment()
+    {
+        if (string.IsNullOrEmpty(newCommentText) || newCommentCommenterId == -1) return;
+
+        TodoItem.Comments.Add(new TodoEditCommentViewModel
+            {
+                Text = newCommentText,
+                CommenterId = newCommentCommenterId
+            });
+        newCommentText = null;
+        newCommentCommenterId = -1;
+    }
+
+    protected void DeleteComment(TodoEditCommentViewModel comment)
+    {
+        TodoItem.Comments.Remove(comment);
+    }
+
+    protected async Task OnSave()
+    {
+        HttpResponseMessage response;
+        if (Id == null)
+        {
+            response = await httpClient.PostAsJsonAsync("todo", TodoItem);
+        }
+        else
+        {
+            response = await httpClient.PutAsJsonAsync("todo", TodoItem);
+        }
+        response.EnsureSuccessStatusCode();
+        navigationManager.NavigateTo("todolist");
+    }
+
+    protected void OnCancel()
+    {
+        navigationManager.NavigateTo("todolist");
+    }
+
+}

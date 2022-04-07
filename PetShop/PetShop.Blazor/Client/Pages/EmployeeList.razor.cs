@@ -38,12 +38,12 @@ namespace PetShop.Blazor.Client.Pages {
             navigationManager.NavigateTo($"/employeelist/edit/{itemToEdit.ID}");
         }
 
-        async Task DeleteItem(EmployeeListViewModel itemtoDelete) {
+        async Task DeleteItem(EmployeeListViewModel itemToDelete) {
             var confirm = await jsRuntime.InvokeAsync<bool>("confirmDelete", null);
             if (confirm) {
-                var response = await httpClient.DeleteAsync($"employee/{itemtoDelete}");
+                var response = await httpClient.DeleteAsync($"employee/{itemToDelete.ID}");
                 response.EnsureSuccessStatusCode();
-                await LoadItemsFromServer();
+                await LoadItemsFromServer(); //works with refresh
             }
         }
 

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PetShop.EF.Migrations
 {
-    public partial class testing : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,10 +19,10 @@ namespace PetShop.EF.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Surname = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    TIN = table.Column<string>(type: "nvarchar(9)", maxLength: 9, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Surname = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    TIN = table.Column<string>(type: "nvarchar(9)", maxLength: 9, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -35,8 +35,8 @@ namespace PetShop.EF.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Surname = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Surname = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     EmployeeType = table.Column<int>(type: "int", nullable: false),
                     SallaryPerMonth = table.Column<decimal>(type: "decimal(10,2)", nullable: false)
                 },
@@ -51,6 +51,7 @@ namespace PetShop.EF.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    PetStatus = table.Column<int>(type: "int", nullable: false),
                     AnimalType = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     Cost = table.Column<decimal>(type: "decimal(10,2)", nullable: false)
@@ -66,7 +67,7 @@ namespace PetShop.EF.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Breed = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Breed = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     PetStatus = table.Column<int>(type: "int", nullable: false),
                     AnimalType = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
@@ -86,7 +87,7 @@ namespace PetShop.EF.Migrations
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CustomerID = table.Column<int>(type: "int", nullable: false),
                     EmployeeID = table.Column<int>(type: "int", nullable: false),
-                    PetID = table.Column<int>(type: "int", nullable: false),
+                    PetID = table.Column<int>(type: "int", nullable: true),
                     PetPrice = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
                     PetFoodID = table.Column<int>(type: "int", nullable: false),
                     PetFoodQty = table.Column<int>(type: "int", nullable: false),
@@ -102,13 +103,13 @@ namespace PetShop.EF.Migrations
                         principalSchema: "PetShop",
                         principalTable: "Customer",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Transactions_Employees_EmployeeID",
                         column: x => x.EmployeeID,
                         principalTable: "Employees",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Transactions_PetFood_PetFoodID",
                         column: x => x.PetFoodID,
@@ -120,7 +121,7 @@ namespace PetShop.EF.Migrations
                         column: x => x.PetID,
                         principalTable: "Pets",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -142,7 +143,8 @@ namespace PetShop.EF.Migrations
                 name: "IX_Transactions_PetID",
                 table: "Transactions",
                 column: "PetID",
-                unique: true);
+                unique: true,
+                filter: "[PetID] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

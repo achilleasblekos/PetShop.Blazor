@@ -12,7 +12,7 @@ using PetShop.EF.Context;
 namespace PetShop.EF.Migrations
 {
     [DbContext(typeof(PetShopContext))]
-    [Migration("20220405122744_initial")]
+    [Migration("20220407124415_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -122,6 +122,9 @@ namespace PetShop.EF.Migrations
 
                     b.Property<decimal>("Cost")
                         .HasColumnType("decimal(10,2)");
+
+                    b.Property<int>("PetStatus")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(10,2)");

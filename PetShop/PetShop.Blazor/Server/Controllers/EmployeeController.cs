@@ -6,7 +6,7 @@ using PetShop.Model;
 namespace PetShop.Blazor.Server.Controllers {
 
     [ApiController]
-    [Route("Controller")]
+    [Route("[controller]")]
     public class EmployeeController : ControllerBase {
 
         private readonly IEntityRepo<Employee> _employeeRepo;
