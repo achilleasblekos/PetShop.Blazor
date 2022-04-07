@@ -103,7 +103,7 @@ namespace PetShop.EF.Repositories
                throw new KeyNotFoundException($"Given id '{id}' was not found in database");
 
             context.Employees.Remove(foundEmployee);
-            context.SaveChangesAsync();
+            //context.SaveChangesAsync();
         }
     }
 }
