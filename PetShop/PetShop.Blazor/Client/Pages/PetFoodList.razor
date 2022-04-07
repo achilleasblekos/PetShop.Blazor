@@ -1,0 +1,48 @@
+﻿@page "/petfoodList"
+@using PetShop.Model
+@inject HttpClient httpClient
+@inject IJSRuntime jsRuntime
+@inject NavigationManager navigationManager
+
+
+
+<h3>Component</h3>
+
+<button class="btn btn-primary" @onclick="AddItem" >Add</button>
+
+@if (isLoading)
+{
+    <p>Loading ...</p>
+}
+else{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>AnimalType</th>
+                
+                <th>Price</th>
+                <th>Cost</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var petfood in petfoodList)
+            {
+                <tr>
+                    <td>@petfood.AnimalType</td>
+                    
+                    <td>@petfood.Price</td>
+                    <td>@petfood.Cost</td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="() => EditItem(petfood)">Edit</button>
+                        <button class="btn btn-danger" @onclick="() => DeleteItem(petfood)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+ }
+
+
+@code {
+
+}

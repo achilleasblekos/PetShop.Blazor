@@ -10,6 +10,8 @@ namespace PetShop.Model
     {
         //Relations
         public List<Transaction> Transactions { get; set; }
+        public PetStatus PetStatus { get; set; }
+
         public PetFood()
         {
 

@@ -1,0 +1,65 @@
+﻿@page "/petfoodlist/edit/{Id:int?}"
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+
+
+<h3>PetFoodEdit</h3>
+
+@if (PetFoodItem == null)
+{
+    <p>Loading ...</p>
+}
+else
+{
+    <div class="row">
+            <div class="col-md-6">
+            <label class="form-label">AnimalType</label>
+            <input class="form-control" @bind="@PetFoodItem.AnimalType" />
+            </div>       
+        
+        <div class="col-md-6">
+            <label class="form-label">Price</label>
+            <input class="form-control" @bind="@PetFoodItem.Price" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Cost</label>
+            <input class="form-control" @bind="@PetFoodItem.Cost" />
+        </div>
+     </div>
+    <div class="row mt-2">
+        <div class="col">
+            <button class="btn btn-success" @onclick="OnSave">Save</button>
+            <button class="btn btn-danger" @onclick="OnCancel">Cancel</button>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public int? ID { get; set; }
+    PetFoodEditViewModel PetFoodItem { get; set; }
+
+     protected override async Task OnInitializedAsync()
+    {
+        PetFoodItem = await httpClient.GetFromJsonAsync<PetFoodEditViewModel>($"petfood/{(ID == null ? 0 : ID)}");
+    }
+
+     protected async Task OnSave()
+    {
+        HttpResponseMessage response;
+        if (ID == null)
+        {
+            response = await httpClient.PostAsJsonAsync("petfood", PetFoodItem);
+        }
+        else
+        {
+            response = await httpClient.PutAsJsonAsync("petfood", PetFoodItem);
+        }
+        response.EnsureSuccessStatusCode();
+        navigationManager.NavigateTo("petfoodlist");
+    }
+
+    protected void OnCancel()
+    {
+        navigationManager.NavigateTo("petfoodlist");
+    }
+}
