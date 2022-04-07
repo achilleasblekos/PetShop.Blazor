@@ -1,0 +1,27 @@
+﻿@*<select class="ms-2 form-select" aria-label="Default select example" value="@Value" @onchange="OnChange">
+    @if (ShowPlaceholder)
+    {
+        <option value="-1">Select Commenter</option>    
+    }
+    @foreach (var commenter in Commenters)
+    {
+        <option value="@commenter.Id"> @commenter.Name </option>
+    }
+</select>
+
+@code{
+    [Parameter] public List<TodoEditCommenterViewModel> Commenters { get; set; }
+    [Parameter] public bool ShowPlaceholder { get; set; }
+    [Parameter] public int Value { get; set; }
+    [Parameter] public EventCallback<int> ValueChanged { get; set; }
+
+    private async Task OnChange(ChangeEventArgs e)
+    {
+        Value = int.Parse(e.Value.ToString());
+        await ValueChanged.InvokeAsync(Value);
+    }
+}<h3>PetStatusSelect</h3>
+
+@code {
+
+}*@
