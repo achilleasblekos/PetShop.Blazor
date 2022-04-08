@@ -3,7 +3,7 @@
 @inject HttpClient httpClient
 @inject NavigationManager navigationManager
 
-<h3>Employee Edit</h3>
+<h3>EmployeeEdit</h3>
 
 @if (EmployeeItem == null)
 {
@@ -20,21 +20,18 @@ else
             <label class="form-label">Surname</label>
             <input class="form-control" @bind="@EmployeeItem.Surname" />
         </div>
-         <div class="col-md-6">
-            <label for="employee-type">Type</label>
-                     <select name="employee-type" class="form-select" @bind="EmployeeType">
-                     <option value="-1">Select Employee Type</option>
-                     @foreach (var item in Enum.GetValues(typeof(EmployeeType)))
-                     {
-                         <option value="@((int)item)">@item.ToString()</option>
-                     }
-                     </select>
-          </div>
+        <div class="col-md-6">
+            <label class="form-label">Employee Type</label>
+            <input class="form-control" @bind="@EmployeeItem.EmployeeType" />
+        </div>
         <div class="col-md-6">
             <label class="form-label">Monthly Salary</label>
             <input class="form-control" @bind="@EmployeeItem.SallaryPerMonth" />
         </div>
-        
+        <div class="col-md-6">
+            <label class="form-label">Transactions</label>
+            
+        </div>
     </div>
     <div class="row mt-2">
         <div class="col">
@@ -46,40 +43,36 @@ else
 @code {
     [Parameter] public int? ID { get; set; }
     EmployeeEditViewModel EmployeeItem { get; set; }
-    private int EmployeeType { get; set; } = -1;
+    List<EmployeeListViewModel> employees = new();
+
+    private async Task LoadItemsFromServer() {
+        employees = await httpClient.GetFromJsonAsync<List<EmployeeListViewModel>>("employee"); 
+    }
 
     protected override async Task OnInitializedAsync()
     {
-        if (ID == null)
-        {
-            EmployeeItem = await httpClient.GetFromJsonAsync<EmployeeEditViewModel>($"employee/{(ID == null ? 0 : ID)}");
-
-        }
-        if(ID != null)
-        {
-            EmployeeType = (int)EmployeeItem.EmployeeType;
-        }
-
+        EmployeeItem = await httpClient.GetFromJsonAsync<EmployeeEditViewModel>($"employee/{(ID == null ? 0 : ID)}");// maybe no need to load from server again, already got all employees, just search for the id
     }
 
-     protected async Task OnSave()
+    protected async Task OnSave()
     {
-        if (string.IsNullOrEmpty(EmployeeItem.Name) ||
-            string.IsNullOrEmpty(EmployeeItem.Surname) ||
-            EmployeeItem.SallaryPerMonth == 0 ||
-            EmployeeType == -1)
-            return;
         HttpResponseMessage response;
-        if (ID == null)
-        {
-            response = await httpClient.PostAsJsonAsync("employee", EmployeeItem);
+
+        if (GetEmployeeCount(EmployeeType.Manager, employees) < 1) {
+            if (ID == null)
+            {
+                response = await httpClient.PostAsJsonAsync("employee", EmployeeItem);
+            }
+            else
+            {
+                response = await httpClient.PutAsJsonAsync("employee", EmployeeItem);
+            }
+            response.EnsureSuccessStatusCode();
+            navigationManager.NavigateTo("employeelist");
         }
-        else
-        {
-            response = await httpClient.PutAsJsonAsync("employee", EmployeeItem);
+        else {
+            throw new ArgumentException("Canet add more than 1 managers");
         }
-        response.EnsureSuccessStatusCode();
-        navigationManager.NavigateTo("employeelist");
     }
 
     protected void OnCancel()
@@ -87,4 +80,13 @@ else
         navigationManager.NavigateTo("employeelist");
     }
 
+    int GetEmployeeCount(EmployeeType type, List<EmployeeListViewModel> _employees) { //count employees of a type
+    int employeeCount = 0;
+    for (int i = 0; i < _employees.Count; i++) {
+        if (employees[i].EmployeeType == type) {
+            employeeCount++;
+            i++;
+        }
+    } return employeeCount; }
 }
+
